@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Read(//tmp/**)",
+      "Read(//e/tmp/**)",
+      "Bash(mvn clean compile:*)",
+      "Read(//c/Program Files/**)",
+      "Read(//c//**)",
+      "Bash(cmd.exe //c \"mvnw.cmd clean compile\")",
+      "Bash(cmd.exe //c \".\\\\mvnw.cmd clean compile\")",
+      "Bash(cmd.exe //c \".\\\\mvnw.cmd clean compile -U\")",
+      "Read(//f/pdi-ce-9.4.0.0-343/data-integration/lib//**)",
+      "Bash(PDI_LIB=\"/f/pdi-ce-9.4.0.0-343/data-integration/lib\")",
+      "Bash(MVN=\"cmd.exe //c e:\\\\AgentProject\\\\kettle-plugin\\\\mvnw.cmd\")",
+      "Bash($MVN install:install-file -Dfile=\"$PDI_LIB/kettle-core-9.4.0.0-343.jar\" -DgroupId=pentaho-kettle -DartifactId=kettle-core -Dversion=9.4.0.0-343 -Dpackaging=jar)",
+      "Bash(cmd.exe //c \".\\\\mvnw.cmd install:install-file -Dfile=F:\\\\pdi-ce-9.4.0.0-343\\\\data-integration\\\\lib\\\\kettle-core-9.4.0.0-343.jar -DgroupId=pentaho-kettle -DartifactId=kettle-core -Dversion=9.4.0.0-343 -Dpackaging=jar\")",
+      "Bash(cmd.exe //c \".\\\\mvnw.cmd install:install-file -Dfile=F:\\\\pdi-ce-9.4.0.0-343\\\\data-integration\\\\lib\\\\kettle-engine-9.4.0.0-343.jar -DgroupId=pentaho-kettle -DartifactId=kettle-engine -Dversion=9.4.0.0-343 -Dpackaging=jar\")",
+      "Bash(cmd.exe //c \".\\\\mvnw.cmd install:install-file -Dfile=F:\\\\pdi-ce-9.4.0.0-343\\\\data-integration\\\\lib\\\\kettle-ui-swt-9.4.0.0-343.jar -DgroupId=pentaho-kettle -DartifactId=kettle-ui-swt -Dversion=9.4.0.0-343 -Dpackaging=jar\")",
+      "Bash(cmd.exe //c:*)",
+      "Read(//c/Users/yuchichang/.m2/repository/pentaho-kettle/kettle-core/9.4.0.0-343/**)",
+      "Bash(TMPDIR=\"/tmp/tmp.q4PQBKMmgP\")",
+      "Bash(PDI_LIB=\"F:\\\\pdi-ce-9.4.0.0-343\\\\data-integration\\\\lib\")",
+      "Bash(ls:*)"
+    ],
+    "additionalDirectories": [
+      "\\tmp",
+      "E:\\AgentProject\\kettle-plugin\\$USERPROFILE\\.m2\\repository",
+      "C:\\Users\\yuchichang\\.m2\\repository\\pentaho-kettle",
+      "F:\\pdi-ce-9.4.0.0-343\\data-integration\\plugins\\tableoutput-with-presql-plugins"
+    ]
+  }
+}
