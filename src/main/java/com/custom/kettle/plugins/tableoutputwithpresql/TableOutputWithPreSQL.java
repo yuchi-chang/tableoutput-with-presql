@@ -1,5 +1,11 @@
 package com.custom.kettle.plugins.tableoutputwithpresql;
 
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import org.pentaho.di.core.database.Database;
 import org.pentaho.di.core.exception.KettleDatabaseException;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.util.Utils;
@@ -28,7 +34,7 @@ public class TableOutputWithPreSQL extends TableOutput {
       if ( !Utils.isEmpty( preSql ) ) {
         logBasic( "Executing Pre-SQL statements..." );
         try {
-          data.db.execStatements( preSql );
+          executePreSqlWithLogging( data.db, preSql );
           if ( !data.db.isAutoCommit() ) {
             data.db.commit();
           }
@@ -44,5 +50,71 @@ public class TableOutputWithPreSQL extends TableOutput {
     }
 
     return super.processRow( smi, sdi );
+  }
+
+  private void executePreSqlWithLogging( Database db, String preSql ) throws KettleDatabaseException {
+    String[] statements = preSql.split( ";" );
+    for ( String sql : statements ) {
+      sql = sql.trim();
+      if ( Utils.isEmpty( sql ) ) {
+        continue;
+      }
+      logBasic( "Pre-SQL: " + sql );
+      try {
+        Statement stmt = db.getConnection().createStatement();
+        try {
+          boolean hasResultSet = stmt.execute( sql );
+          if ( hasResultSet ) {
+            ResultSet rs = stmt.getResultSet();
+            logResultSet( rs );
+            rs.close();
+          } else {
+            int updateCount = stmt.getUpdateCount();
+            logBasic( "Pre-SQL result: " + updateCount + " rows affected." );
+          }
+        } finally {
+          stmt.close();
+        }
+      } catch ( SQLException e ) {
+        throw new KettleDatabaseException( "Error executing Pre-SQL: " + sql, e );
+      }
+    }
+  }
+
+  private void logResultSet( ResultSet rs ) throws SQLException {
+    ResultSetMetaData metaData = rs.getMetaData();
+    int colCount = metaData.getColumnCount();
+
+    // log column headers
+    StringBuilder header = new StringBuilder( "Pre-SQL result: | " );
+    for ( int i = 1; i <= colCount; i++ ) {
+      header.append( metaData.getColumnName( i ) );
+      if ( i < colCount ) {
+        header.append( " | " );
+      }
+    }
+    header.append( " |" );
+    logBasic( header.toString() );
+
+    // log rows (limit to 100 rows to avoid flooding the log)
+    int rowCount = 0;
+    while ( rs.next() && rowCount < 100 ) {
+      StringBuilder row = new StringBuilder( "Pre-SQL result: | " );
+      for ( int i = 1; i <= colCount; i++ ) {
+        String val = rs.getString( i );
+        row.append( val != null ? val : "NULL" );
+        if ( i < colCount ) {
+          row.append( " | " );
+        }
+      }
+      row.append( " |" );
+      logBasic( row.toString() );
+      rowCount++;
+    }
+    if ( rowCount == 0 ) {
+      logBasic( "Pre-SQL result: (empty result set)" );
+    } else if ( !rs.isAfterLast() ) {
+      logBasic( "Pre-SQL result: ... (truncated, showing first 100 rows)" );
+    }
   }
 }
