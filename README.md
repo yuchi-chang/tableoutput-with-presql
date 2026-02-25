@@ -128,3 +128,15 @@ copy target\tableoutput-with-presql-1.0.0.jar "F:\pdi-ce-9.4.0.0-343\data-integr
 | Pentaho Data Integration | 9.4.0.0-343 |
 | Java | 11 |
 | Maven | 3.9+（透過 Maven Wrapper） |
+
+## 使用方式
+
+1. 開啟 Spoon，在 Step 面板的 **Output** 分類找到 **Table Output with Pre-SQL**
+
+2. 拖入 Transformation 畫布，雙擊開啟設定
+
+  ![Step 面板](docs/images/kettle-1.png)
+
+3. **Pre-SQL Tab** — 輸入要在寫入資料前執行的 SQL
+
+   ![Pre-SQL Tab 設定](docs/images/kettle-2.png)
